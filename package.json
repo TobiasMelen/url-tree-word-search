@@ -1,0 +1,15 @@
+{
+  "name": "url-tree-word-search",
+  "version": "0.1.0",
+  "description": "Application that spawns url trees with word nodes",
+  "main": "server.js",
+  "scripts":{
+    "test": "ava"
+  },
+  "repository": "https://github.com/makingwaves-se/url-tree-word-search",
+  "author": "Making Waves",
+  "license": "MIT",
+  "devDependencies": {
+    "ava": "^1.2.1"
+  }
+}
