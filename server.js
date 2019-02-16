@@ -40,7 +40,7 @@ function formatResultFromNode(req, treeKey, node) {
     ? node.value
     : node.children.map(
         child =>
-          `${req.connection.encrypted ? "https" : "http"}://${
+          `${req.connection.encrypted || req.headers['x-arr-ssl'] ? "https" : "http"}://${
             req.headers.host
           }/${treeKey}/${child}`
       );
