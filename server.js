@@ -35,10 +35,15 @@ function withErrorHandledJsonRes(serverHandler) {
   };
 }
 
-function formatResultFromNode(host, treeKey, node) {
+function formatResultFromNode(req, treeKey, node) {
   return node.value != null
     ? node.value
-    : node.children.map(child => `${host}/${treeKey}/${child}`);
+    : node.children.map(
+        child =>
+          `${req.connection.encrypted ? "https" : "http"}://${
+            req.headers.host
+          }/${treeKey}/${child}`
+      );
 }
 
 const port = process.env.PORT || 8080;
@@ -61,11 +66,7 @@ http
         const treeKey = randomString();
         trees.set(treeKey, flattenedUrlTree);
         setTimeout(() => trees.delete(treeKey), 1000 * newUrlTree.length);
-        return formatResultFromNode(
-          req.headers.host,
-          treeKey,
-          newUrlTree[0][0]
-        );
+        return formatResultFromNode(req, treeKey, newUrlTree[0][0]);
       }
       const urlParams = req.url.substring(1).split("/");
       if (urlParams.length !== 2) {
@@ -82,7 +83,7 @@ http
       if (node == null) {
         throw new HttpError(404, "How did you end up here?");
       }
-      return formatResultFromNode(req.headers.host, treeKey, node);
+      return formatResultFromNode(req, treeKey, node);
     })
   )
   .listen(port);
